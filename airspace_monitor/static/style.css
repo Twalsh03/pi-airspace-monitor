@@ -1,0 +1,10 @@
+html, body, #map { height: 100%; margin: 0; }
+body { font-family: system-ui, sans-serif; }
+.panel { position: fixed; z-index: 1000; background: rgba(255,255,255,.93);
+  border-radius: 6px; box-shadow: 0 1px 5px #0004; padding: 10px 12px; }
+#status { top: 12px; left: 12px; }
+.connected { color: #176b2b; } .reconnecting { color: #9a5a00; }
+#legend { right: 12px; bottom: 25px; line-height: 1.8; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+.aircraft { background: #2674d9; } .drone { background: #d93434; }
+.pilot { background: #e68a25; }
