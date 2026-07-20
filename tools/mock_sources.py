@@ -1,10 +1,13 @@
 """Serve moving sample dump1090 and Remote ID responses."""
 import json
+import os
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 START = time.monotonic()
+AIRCRAFT_PORT = int(os.getenv("MOCK_AIRCRAFT_PORT", "8080"))
+RID_PORT = int(os.getenv("MOCK_RID_PORT", "9000"))
 
 def payloads() -> tuple[dict, dict]:
     step = (time.monotonic() - START) * 0.0005
@@ -25,9 +28,9 @@ def payloads() -> tuple[dict, dict]:
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         aircraft, rid = payloads()
-        if self.server.server_port == 8080 and self.path == "/data/aircraft.json":
+        if self.server.server_port == AIRCRAFT_PORT and self.path == "/data/aircraft.json":
             body = aircraft
-        elif self.server.server_port == 9000 and self.path == "/rid.json":
+        elif self.server.server_port == RID_PORT and self.path == "/rid.json":
             body = rid
         else:
             self.send_error(404)
@@ -43,10 +46,11 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 def main() -> None:
-    servers = [ThreadingHTTPServer(("0.0.0.0", port), Handler) for port in (8080, 9000)]
+    servers = [ThreadingHTTPServer(("0.0.0.0", port), Handler)
+               for port in (AIRCRAFT_PORT, RID_PORT)]
     for server in servers:
         threading.Thread(target=server.serve_forever, daemon=True).start()
-    print("Mock sources listening on :8080 and :9000")
+    print(f"Mock sources listening on :{AIRCRAFT_PORT} and :{RID_PORT}")
     try:
         while True:
             time.sleep(3600)

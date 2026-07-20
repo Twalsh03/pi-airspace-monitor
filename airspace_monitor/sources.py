@@ -97,7 +97,7 @@ async def fetch_rid(client: httpx.AsyncClient, url: str) -> list[Track]:
                 heading_deg=_number(drone.get("heading_deg")),
                 extra={
                     key: drone[key]
-                    for key in ("id_type", "height_agl_m", "vertical_speed_mps", "rssi",
+                    for key in ("id_type", "mac", "height_agl_m", "vertical_speed_mps", "rssi",
                                 "operator_id", "description")
                     if key in drone
                 },

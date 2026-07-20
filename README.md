@@ -75,6 +75,52 @@ aircraft needs numeric `lat`, `lon`, and string `hex`; optional fields include
 normalized to meters and ground speed to meters per second.
 See `examples/aircraft.json`.
 
+## Drone Remote ID pipeline
+
+On real hardware, `unix_rid_capture` receives ASTM F3411 / ASD-STAN 4709-002
+messages and emits newline-delimited JSON. The bridge merges fragmented
+messages and exposes the normalized endpoint consumed by the dashboard:
+
+```
+unix_rid_capture → (UDP :32001) → rid_bridge → /rid.json → airspace_monitor
+```
+
+Build and run the capture tool according to its project documentation, with
+UDP output directed to port `32001`. Then run the bridge:
+
+```sh
+python -m rid_bridge
+```
+
+The bridge listens on UDP `0.0.0.0:32001` and serves `http://localhost:9000/rid.json`.
+For a pipe instead of UDP, use:
+
+```sh
+RID_INPUT=stdin rid_capture -x | python -m rid_bridge
+```
+
+The bridge maps `uav id` to `id` (falling back to `mac`), UAV latitude/longitude
+to the drone position, altitude/speed/heading to metric fields, `operator` to
+`operator_id`, and base latitude/longitude to the pilot position. ASTM
+unknown sentinels (`-1000` altitude, `255` speed, `361` heading, and `(0, 0)`
+position) are omitted. Fields from separate messages for the same ID are
+merged, and stale records expire.
+
+Bridge environment variables:
+
+| Environment variable | Default | Meaning |
+| --- | --- | --- |
+| `RID_BRIDGE_HOST` | `0.0.0.0` | HTTP bind address |
+| `RID_BRIDGE_PORT` | `9000` | HTTP port |
+| `RID_INPUT` | `udp` | `udp` or `stdin` |
+| `RID_UDP_HOST` | `0.0.0.0` | UDP bind address |
+| `RID_UDP_PORT` | `32001` | UDP input port |
+| `STALE_SECONDS` | `30.0` | Record expiry age |
+
+Install `deploy/rid-bridge.service` alongside the main service, editing the
+placeholder user and paths. The unit loads optional
+`/etc/airspace-monitor.env`, restarts on failure, and runs as `pi`.
+
 ### Remote ID
 
 The RID receiver contract is an object with a numeric `timestamp` and `drones`
