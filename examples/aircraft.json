@@ -1,0 +1,4 @@
+{"now":1758400000.0,"messages":123456,"aircraft":[
+  {"hex":"a1b2c3","flight":"UAL123  ","lat":37.61,"lon":-122.38,"alt_baro":8500,"gs":312.0,"track":118.5,"seen":0.4,"seen_pos":0.5,"squawk":"1200"},
+  {"hex":"d4e5f6","flight":"","alt_baro":"ground","seen":30.0}
+]}

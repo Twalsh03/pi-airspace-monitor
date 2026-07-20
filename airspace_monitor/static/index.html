@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raspberry Pi Airspace Monitor</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="map"></div>
+  <div id="status" class="panel">Connecting…</div>
+  <div id="legend" class="panel"><strong>Airspace</strong>
+    <div><span class="dot aircraft"></span> Aircraft</div>
+    <div><span class="dot drone"></span> Drone</div>
+    <div><span class="dot pilot"></span> Pilot</div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

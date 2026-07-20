@@ -1,0 +1,4 @@
+{"timestamp":1758400000.0,"drones":[
+  {"id":"1596F3B3AA1EX9K","id_type":"serial_number","lat":37.7649,"lon":-122.4194,"alt_msl_m":120.5,"height_agl_m":95.0,"speed_mps":6.2,"vertical_speed_mps":0.5,"heading_deg":275.0,"rssi":-68,"operator_id":"FA3ABC123DEF","description":"DJI Mavic 3","pilot":{"lat":37.766,"lon":-122.418,"alt_msl_m":15.0},"last_seen":1758400000.0},
+  {"id":"CA-987654321","id_type":"caa_registration","lat":37.751,"lon":-122.435,"alt_msl_m":86.0,"speed_mps":3.4,"heading_deg":90.0,"description":"Survey quadcopter"}
+]}
