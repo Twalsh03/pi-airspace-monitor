@@ -28,6 +28,59 @@ The single process and one systemd service serve both API and UI, which keeps
 deployment simple. The dashboard is intended for a local network; it can be
 put behind an authenticated reverse proxy later if remote access is needed.
 
+## Hardware
+
+Exact equipment for real reception. Everything is passive receive-only. Two
+independent receive chains feed the aggregator:
+
+- ADS-B (manned aircraft, 1090 MHz) → `dump1090-fa` → `/data/aircraft.json`
+- Drone Remote ID (BLE + Wi-Fi) → `unix_rid_capture` → `rid_bridge` → `/rid.json`
+
+### Compute (required)
+
+| Qty | Item | Exact model / spec |
+| --- | --- | --- |
+| 1 | Single-board computer | Raspberry Pi 5, 8 GB (Pi 4 Model B, 4 GB minimum) |
+| 1 | Power supply | Official Raspberry Pi 27 W USB-C PD (Pi 5) / 15.3 W USB-C (Pi 4) |
+| 1 | Cooling | Raspberry Pi Active Cooler (Pi 5) / heatsink+fan case (Pi 4) |
+| 1 | Storage | SanDisk Extreme 32 GB microSD (A2) — or Pi 5 M.2 HAT + 256 GB NVMe |
+| 1 | Network | Ethernet cable (keep onboard Wi-Fi free for RID capture) |
+
+OS: Raspberry Pi OS (64-bit, Bookworm).
+
+### ADS-B chain — 1090 MHz (aircraft)
+
+| Qty | Item | Exact model |
+| --- | --- | --- |
+| 1 | SDR receiver | FlightAware Pro Stick Plus (RTL2832U + built-in 1090 MHz filter + LNA, SMA-female) |
+| 1 | Antenna | FlightAware 1090 MHz ADS-B Antenna, 66 cm / 26 in, N-female |
+| 1 | Coax | N-male → SMA-male, LMR240/RG6, ~3 m |
+
+- Budget alternative: RTL-SDR Blog V4 dongle + RTL-SDR Blog 1090/978 MHz LNA+filter.
+- US-only optional: a second dongle for 978 MHz UAT (`dump978-fa`).
+- `dump1090-fa` publishes `aircraft.json` natively — no extra glue.
+
+### Drone Remote ID chain — BLE + Wi-Fi
+
+Remote ID is broadcast over Bluetooth 4 Legacy, Bluetooth 5 Long Range (Coded
+PHY), Wi-Fi Beacon (2.4 GHz), and Wi-Fi NAN. Recommended Pi-native capture uses
+[`sxjack/unix_rid_capture`](https://github.com/sxjack/unix_rid_capture):
+
+| Qty | Item | Exact model | Purpose |
+| --- | --- | --- | --- |
+| 1 | Wi-Fi dongle (monitor mode) | Alfa AWUS036ACH (Realtek RTL8812AU) | Wi-Fi Beacon + NAN |
+| 1 | BLE sniffer | Nordic nRF52840 Dongle (PCA10059) + nRF Sniffer for BLE | Bluetooth 5 Long Range |
+| — | Onboard Bluetooth | Pi's built-in BT via `bluez` | Bluetooth 4 Legacy |
+
+- The RTL8812AU needs the third-party `rtl8812au` driver built/installed.
+- Onboard BT catches only BT4 Legacy; the nRF52840 dongle is required for BT5 Long Range.
+- Alternatives: an ESP32 (LilyGO TTGO T-Beam) with RID receiver firmware, or the
+  official OpenDroneID Android receiver app for bench testing.
+
+A HackRF is **not** needed: a dedicated RTL-SDR is better and cheaper for ADS-B,
+and Remote ID is decoded from Bluetooth/Wi-Fi protocols (not raw RF), which a
+HackRF cannot provide.
+
 ## Install and run
 
 Requires Python 3.11+:
