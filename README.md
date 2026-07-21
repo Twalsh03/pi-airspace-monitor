@@ -1,6 +1,6 @@
 Disclaimer:
 
-None og this has been tested as of yet. 
+None of this has been tested as of yet. 
 
 This is a WIP
 
