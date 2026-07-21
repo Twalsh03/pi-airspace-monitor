@@ -1,3 +1,10 @@
+Disclaimer:
+
+None og this has been tested as of yet. 
+
+This is a WIP
+
+
 # Raspberry Pi Airspace Monitor
 
 The Raspberry Pi Airspace Monitor is a passive, receive-only dashboard for live
