@@ -81,6 +81,26 @@ A HackRF is **not** needed: a dedicated RTL-SDR is better and cheaper for ADS-B,
 and Remote ID is decoded from Bluetooth/Wi-Fi protocols (not raw RF), which a
 HackRF cannot provide.
 
+### Bill of Materials — Sources
+
+| Component | Item | Link |
+|---|---|---|
+| **Compute** | Raspberry Pi 5 (8GB) | https://www.raspberrypi.com/products/raspberry-pi-5/ |
+| | Raspberry Pi 4 (4GB, min fallback) | https://www.raspberrypi.com/products/raspberry-pi-4-model-b/ |
+| | Official 27W USB-C PSU | https://www.raspberrypi.com/products/27w-power-supply/ |
+| | Official Active Cooler | https://www.raspberrypi.com/products/active-cooler/ |
+| | Storage (microSD or USB SSD) | e.g. SanDisk Extreme Pro microSD, or Samsung T7 SSD |
+| | Ethernet cable | Cat5e/6, any retailer |
+| **ADS-B (1090 MHz)** | FlightAware Pro Stick Plus | https://www.flightaware.com/adsb/prostick/ |
+| | FlightAware 1090 MHz antenna + coax | https://www.flightaware.com/adsb/antenna/ |
+| | Budget alt: RTL-SDR Blog V4 | https://www.rtl-sdr.com/buy-rtl-sdr-dvb-t-dongles/ |
+| **Drone Remote ID (BLE + Wi-Fi)** | Alfa AWUS036ACH (RTL8812AU) | https://www.alfa.com.tw/products/awus036ach |
+| | Nordic nRF52840 Dongle (PCA10059) | https://www.nordicsemi.com/Products/Development-hardware/nRF52840-Dongle |
+| | Onboard BT (BT4 Legacy) | Built into Pi — no purchase |
+| **Software** | unix_rid_capture | https://github.com/sxjack/unix_rid_capture |
+| | rid_bridge (this repo) | https://github.com/Twalsh03/pi-airspace-monitor |
+| | opendroneid reference tools | https://github.com/opendroneid |
+
 ## Install and run
 
 Requires Python 3.11+:
